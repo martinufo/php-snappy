@@ -1,0 +1,42 @@
+#!/usr/bin/make -f
+
+# DEB_TAR_SRCDIR := $(shell basename $(wildcard *.tgz) .tgz)
+
+# include /usr/share/cdbs/1/rules/tarball.mk
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+PHP_EX5=$(shell /usr/bin/php-config5 --extension-dir)
+
+#
+# local hacks
+#
+
+clean::
+	rm -f php[5]-snappy.postrm php[5]-snappy.postinst
+	rm -f *cdbs*
+
+configure_for_php%:
+	cd $(DEB_SRCDIR) && phpize --clean && phpize && \
+	    ./configure --enable-snappy --with-php-config=/usr/bin/php-config$*
+	sed -e 's/phpX/php$*/g' < debian/phpX-snappy.postinst > debian/php$*-snappy.postinst
+	sed -e 's/phpX/php$*/g' < debian/phpX-snappy.postrm   > debian/php$*-snappy.postrm
+
+#
+# cdbs things
+#
+
+define install_rule
+	$(MAKE) -C $(DEB_SRCDIR)
+	mkdir -p debian/php$1-snappy$(PHP_EX$1)
+	install -m 644 -o root -g root $(DEB_SRCDIR)/modules/snappy.so debian/php$1-snappy$(PHP_EX$1)/snappy.so
+	mkdir -p debian/php$1-snappy/usr/share/lintian/overrides
+	echo "php5-snappy: no-shlibs-control-file $(PHP_EX$1)/snappy.so" > debian/php$1-snappy/usr/share/lintian/overrides/php$1-snappy
+	echo "php$1:Depends=phpapi-`php-config$1 --phpapi`, php$1-common" >> debian/php$1-snappy.substvars
+	mkdir -p debian/php$1-snappy/usr/share/php$1-snappy/
+	cp debian/snappy.ini  debian/php$1-snappy/usr/share/php$1-snappy/snappy.ini-dist
+	#01-01-1970 in changelog
+	# touch build-tree/*/ChangeLog
+endef
+
+install/php5-snappy:: configure_for_php5
+	$(call install_rule,5)

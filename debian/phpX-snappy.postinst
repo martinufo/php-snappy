@@ -1,0 +1,14 @@
+#! /bin/sh -e
+set -e
+
+if test -e /etc/phpX/conf.d/snappy.ini; then
+    sed s/\;extension/extension/g -i /etc/phpX/conf.d/snappy.ini
+fi
+
+if test "$1" = "configure"; then
+    ucf /usr/share/phpX-snappy/snappy.ini-dist /etc/phpX/conf.d/snappy.ini
+fi
+
+#DEBHELPER#
+
+exit 0
