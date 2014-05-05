@@ -66,8 +66,8 @@ install: build
 	mkdir -p debian/$(BIN_PACKAGE_NAME)/$(EXT_DIR)
 	install -m 644 -o root -g root ../tmp/modules/$(PECL_PKG_NAME).so debian/$(BIN_PACKAGE_NAME)/$(EXT_DIR)/$(PECL_PKG_NAME).so
 	if [ -f "debian/$(PECL_PKG_NAME).ini" ]; then \
-		mkdir -p debian/$(BIN_PACKAGE_NAME)/etc/php5/conf.d; \
-		cp debian/$(PECL_PKG_NAME).ini debian/$(BIN_PACKAGE_NAME)/etc/php5/conf.d; \
+		mkdir -p debian/$(BIN_PACKAGE_NAME)/etc/php5/mods-available; \
+		cp debian/$(PECL_PKG_NAME).ini debian/$(BIN_PACKAGE_NAME)/etc/php5/mods-available; \
 	fi
 
 # Build architecture-independent files here.

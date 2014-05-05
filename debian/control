@@ -2,13 +2,13 @@ Source: php-snappy
 Section: php
 Priority: optional
 Maintainer: Bernhard K. Weisshuhn <bkw@codingforce.com>
-Build-Depends: debhelper (>= 7), php5-dev(>= 5.3.1)
+Build-Depends: debhelper (>= 7), php5-dev(>= 5.3.1), libsnappy-dev
 Standards-Version: 3.9.2
 Homepage: http://code.google.com/p/snappy/
 
 Package: php5-snappy
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${php5:Depends}, ucf
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${php5:Depends}, ucf, libsnappy1
 Description: snappy extension module for PHP5
  Snappy is a compression/decompression library. It does not aim for maximum
  compression, or compatibility with any other compression library; instead, it
